@@ -7,7 +7,9 @@ from src.database.database import Base, engine
 
 
 from src.api.estudiante import router as estudiantes_router
+from src.api.producto import router as productos_router
 from src.entities.estudiante import Estudiante
+from src.entities.producto import Producto
 
 
 @asynccontextmanager
@@ -34,3 +36,4 @@ def inicio():
 
 
 app.include_router(estudiantes_router)
+app.include_router(productos_router)
