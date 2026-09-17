@@ -5,6 +5,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from src.database.database import Base, engine
+# Los imports registran las entidades en Base.metadata antes de create_all.
+# pylint: disable=unused-import
+from src.entities.estudiante import Estudiante
+from src.entities.persona import Persona
+from src.entities.producto import Producto
+# pylint: enable=unused-import
 
 # Importación de routers de cada módulo
 from src.api.estudiante import router as estudiantes_router
