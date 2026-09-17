@@ -34,7 +34,7 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          python -c "from main import app; from src.database.database import Base, engine; Base.metadata.create_all(bind=engine)"
+          python -c "import main; from src.database.seeder import main as ejecutar_seeder; ejecutar_seeder()"
 
       - name: Verificar conexion y cambios aplicados
         env:
