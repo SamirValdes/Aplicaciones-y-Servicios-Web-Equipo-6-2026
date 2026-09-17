@@ -1,0 +1,42 @@
+name: CD - Actualizar Neon
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actualizar-base-de-datos:
+    name: Aplicar cambios en PostgreSQL de Neon
+    runs-on: ubuntu-latest
+    environment: DATABASE_URL
+
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Crear tablas en Neon
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          python -c "from main import app; from src.database.database import Base, engine; Base.metadata.create_all(bind=engine)"
+
+      - name: Verificar conexion y cambios aplicados
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python -m scripts.verificar_bd
