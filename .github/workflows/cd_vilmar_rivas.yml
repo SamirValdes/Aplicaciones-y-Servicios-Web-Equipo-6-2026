@@ -21,9 +21,9 @@ jobs:
           pip install -r requirements.txt
       - name: Ejecutar Migraciones en Neon
         env:
-          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python -c "from src.database.database import engine, Base; import src.entities.persona; Base.metadata.create_all(bind=engine)"
       - name: Ejecutar Seeder de Vilmar
         env:
-          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: set PYTHONPATH=. && python src/database/seeder_persona.py
