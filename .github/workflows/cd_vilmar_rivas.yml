@@ -22,8 +22,8 @@ jobs:
       - name: Ejecutar Migraciones en Neon
         env:
           DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
-        run: python -c "from src.database.database import engine, Base; import src.entities.persona; import src.entities.estudiante; Base.metadata.create_all(bind=engine)"
+        run: python -c "from src.database.database import engine, Base; import src.entities.persona; import src.entities.estudiante; import src.entities.producto; Base.metadata.create_all(bind=engine)"
       - name: Ejecutar Seeder
         env:
           DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
-        run: python seeder.py
+        run: set PYTHONPATH=. && python src/database/seeder.py
