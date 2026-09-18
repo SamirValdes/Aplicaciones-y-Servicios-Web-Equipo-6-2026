@@ -1,24 +1,30 @@
-"""Modulo para poblar la base de datos con datos iniciales de Persona."""
-from sqlalchemy.orm import Session
-from src.database.database import engine, Base
+﻿"""Script para poblar la base de datos con datos iniciales de personas."""
+
+from src.database.database import SessionLocal
 from src.entities.persona import Persona
+from src.database.seeder import crear_tablas, _insertar_si_falta
 
-def seed_data():
-    """Crea las tablas e inserta el registro inicial de la entidad."""
-    Base.metadata.create_all(bind=engine)
+PERSONAS_SEMILLA = [
+    {
+        "nombre": "Vilmar",
+        "apellido": "Rivas",
+        "email": "vilmar.rivas@email.com",
+        "telefono": "3000000000",
+        "activo": True,
+    }
+]
 
-    with Session(engine) as session:
-        if not session.query(Persona).first():
-            print("Insertando datos iniciales de Persona...")
-            nueva_persona = Persona(
-                nombre="Vilmar",
-                apellido="Rivas"
-            )
-            session.add(nueva_persona)
-            session.commit()
-            print("Seeder de Persona ejecutado con exito.")
-        else:
-            print("Los datos de Persona ya existen.")
+def main() -> None:
+    """Funcion principal que ejecuta la creacion de tablas y la siembra de datos."""
+    crear_tablas()
+
+    db = SessionLocal()
+    try:
+        personas = _insertar_si_falta(db, Persona, "email", PERSONAS_SEMILLA)
+    finally:
+        db.close()
+
+    print(f"Seeder terminado. Personas nuevas: {personas}")
 
 if __name__ == "__main__":
-    seed_data()
+    main()
