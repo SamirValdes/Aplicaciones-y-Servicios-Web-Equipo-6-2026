@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.database.database import Base, SessionLocal, engine
 from src.entities.estudiante import Estudiante
+from src.entities.producto import Producto
 
 ESTUDIANTES_SEMILLA = [
     {"nombre": "Juan David Perez", "programa": "Ingenieria de Sistemas", "semestre": 5},
@@ -14,6 +15,27 @@ ESTUDIANTES_SEMILLA = [
         "semestre": 3,
     },
     {"nombre": "Andres Felipe Ruiz", "programa": "Ingenieria Biomedica", "semestre": 8},
+]
+
+PRODUCTOS_SEMILLA = [
+    {
+        "nombre": "Laptop Lenovo",
+        "descripcion": "Laptop para trabajo y estudio",
+        "precio": 2500000,
+        "stock": 8,
+    },
+    {
+        "nombre": "Teclado mecanico",
+        "descripcion": "Teclado mecanico USB",
+        "precio": 180000,
+        "stock": 15,
+    },
+    {
+        "nombre": "Mouse inalambrico",
+        "descripcion": "Mouse ergonomico con conexion USB",
+        "precio": 85000,
+        "stock": 20,
+    },
 ]
 
 
@@ -55,10 +77,14 @@ def main() -> None:
     db = SessionLocal()
     try:
         estudiantes = _insertar_si_falta(db, Estudiante, "nombre", ESTUDIANTES_SEMILLA)
+        productos = _insertar_si_falta(db, Producto, "nombre", PRODUCTOS_SEMILLA)
     finally:
         db.close()
 
-    print(f"Seeder terminado. Estudiantes nuevos: {estudiantes}")
+    print(
+        f"Seeder terminado. Estudiantes nuevos: {estudiantes}. "
+        f"Productos nuevos: {productos}"
+    )
 
 
 if __name__ == "__main__":
