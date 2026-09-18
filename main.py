@@ -35,3 +35,7 @@ def inicio():
         "mensaje": "API - Aplicaciones y servicios web ITM 2026-2",
         "docs": "/docs",
     }
+
+
+app.include_router(estudiantes_router)
+app.include_router(productos_router)
