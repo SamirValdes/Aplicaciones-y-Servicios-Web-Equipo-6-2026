@@ -1,0 +1,29 @@
+name: CD Vilmar Rivas
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del codigo
+        uses: actions/checkout@v3
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Ejecutar Migraciones en Neon
+        env:
+          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+        run: python -c "from src.database.database import engine, Base; import src.entities.persona; import src.entities.estudiante; Base.metadata.create_all(bind=engine)"
+      - name: Ejecutar Seeder
+        env:
+          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+        run: python seeder.py
