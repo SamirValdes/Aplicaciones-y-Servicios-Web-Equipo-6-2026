@@ -6,8 +6,7 @@ from src.database.seeder import crear_tablas, _insertar_si_falta
 
 PERSONAS_SEMILLA = [
     {
-        "nombre": "Vilmar",
-        "apellido": "Rivas",
+        "nombre": "Vilmar Rivas",
         "email": "vilmar.rivas@email.com",
         "telefono": "3000000000",
         "activo": True,
