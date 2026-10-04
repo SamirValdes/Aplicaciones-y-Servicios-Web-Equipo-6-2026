@@ -13,6 +13,7 @@ class EstudianteCreate(BaseModel):
 
     nombre: str = Field(min_length=1, max_length=120)
     programa: str = Field(min_length=1, max_length=120)
+    # Validamos que el semestre sea un número lógico para una universidad
     semestre: int = Field(ge=1, le=14)
 
 
