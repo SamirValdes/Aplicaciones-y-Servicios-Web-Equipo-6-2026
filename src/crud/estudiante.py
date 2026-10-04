@@ -5,7 +5,6 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-# Asegúrate de que las rutas de importación coincidan con la estructura de tu proyecto
 from src.entities.estudiante import Estudiante
 from src.schemas.estudiante import EstudianteCreate, EstudianteUpdate
 
@@ -37,8 +36,6 @@ def actualizar(
     db: Session, estudiante: Estudiante, datos: EstudianteUpdate
 ) -> Estudiante:
     """Actualiza los datos de un estudiante si se proporcionan nuevos valores"""
-    # Como en el schema de Update definimos los campos como opcionales (Optional),
-    # validamos que vengan datos antes de sobrescribirlos.
     if datos.nombre is not None:
         estudiante.nombre = datos.nombre
     if datos.programa is not None:
