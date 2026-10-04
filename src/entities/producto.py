@@ -1,3 +1,5 @@
+"""Módulo que define el modelo de base de datos para producto"""
+
 from decimal import Decimal
 from uuid import UUID, uuid4
 
@@ -7,7 +9,10 @@ from sqlalchemy.orm import Mapped, mapped_column
 from src.database.database import Base
 
 
+# pylint: disable=too-few-public-methods
 class Producto(Base):
+    """Clase que representa la entidad de producto en la base de datos"""
+
     __tablename__ = "productos"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)

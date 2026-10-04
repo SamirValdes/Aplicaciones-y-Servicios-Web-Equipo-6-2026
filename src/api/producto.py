@@ -1,3 +1,5 @@
+"""Módulo de rutas (endpoints) para la API de productos"""
+
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -12,11 +14,13 @@ router = APIRouter(prefix="/productos", tags=["productos"])
 
 @router.get("", response_model=list[ProductoRead])
 def listar_productos(db: Session = Depends(get_db)):
+    """Obtiene la lista de todos los productos disponibles"""
     return repo.listar(db)
 
 
 @router.get("/{producto_id}", response_model=ProductoRead)
 def obtener_producto(producto_id: UUID, db: Session = Depends(get_db)):
+    """Obtiene un producto especifico por su ID"""
     producto = repo.obtener_por_id(db, producto_id)
     if producto is None:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
@@ -29,6 +33,7 @@ def obtener_producto(producto_id: UUID, db: Session = Depends(get_db)):
     status_code=status.HTTP_201_CREATED,
 )
 def crear_producto(datos: ProductoCreate, db: Session = Depends(get_db)):
+    """Crea un nuevo producto en la base de datos"""
     return repo.crear(db, datos)
 
 
@@ -38,6 +43,7 @@ def actualizar_producto(
     datos: ProductoUpdate,
     db: Session = Depends(get_db),
 ):
+    """Actualiza la informacion de un producto existente"""
     producto = repo.obtener_por_id(db, producto_id)
     if producto is None:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
@@ -46,6 +52,7 @@ def actualizar_producto(
 
 @router.delete("/{producto_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_producto(producto_id: UUID, db: Session = Depends(get_db)):
+    """Elimina un producto permanentemente de la base de datos"""
     producto = repo.obtener_por_id(db, producto_id)
     if producto is None:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
