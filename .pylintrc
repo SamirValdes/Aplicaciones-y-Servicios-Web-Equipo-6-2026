@@ -5,7 +5,7 @@ fail-under=10
 ignore-paths=^scripts/,^src/unit/
 
 [FORMAT]
-max-line-length=79
+max-line-length=95
 indent-string='    '
 indent-after-paren=4
 
