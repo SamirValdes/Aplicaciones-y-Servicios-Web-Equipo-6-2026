@@ -1,6 +1,5 @@
 name: CI - Verificar Pull Request
 
-# Se dispara al abrir un PR hacia main y en cada push a ese PR
 "on":
   pull_request:
     branches:
@@ -8,7 +7,7 @@ name: CI - Verificar Pull Request
 
 jobs:
   verificar:
-    name: Verificar codigo, formato PEP 8 y conexion a la base de datos
+    name: Verificar codigo, formato, BD, pruebas y Docker
     runs-on: ubuntu-latest
     environment: DATABASE_URL
 
@@ -43,3 +42,20 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python -m scripts.verificar_bd
+
+      - name: Ejecutar pruebas con Pytest
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pytest
+
+      - name: Construir la imagen Docker
+        run: docker build -t fastapi_app .
+
+      - name: Ejecutar aplicacion en Docker
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          docker run -d -p 8000:8000 -e DATABASE_URL="${{ secrets.DATABASE_URL }}" --name contenedor_api fastapi_app
+          sleep 5
+          curl -f http://localhost:8000/docs || exit 1
+          docker stop contenedor_api
