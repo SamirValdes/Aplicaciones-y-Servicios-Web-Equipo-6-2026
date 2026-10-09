@@ -18,9 +18,6 @@ ESTUDIANTE_ACTUALIZADO = {
 }
 
 
-@pytest.fixture
-def cliente():
-    return TestClient(app)
 
 
 def _crear_estudiante(cliente, datos=None):
