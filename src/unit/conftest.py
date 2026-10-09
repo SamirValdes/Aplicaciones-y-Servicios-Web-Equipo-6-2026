@@ -1,4 +1,4 @@
-import pytest
+﻿import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -7,7 +7,6 @@ from sqlalchemy.pool import StaticPool
 from main import app
 from src.database.database import Base, get_db
 
-# IMPORTACIÓN DIRECTA Y FORZADA DE LAS CLASES MODELO
 from src.entities.estudiante import Estudiante
 from src.entities.persona import Persona
 from src.entities.producto import Producto
@@ -26,11 +25,9 @@ def override_get_db():
     finally:
         db.close()
 
-app.dependency_overrides[get_db] = override_get_db
-
 @pytest.fixture(autouse=True)
 def setup_database():
-    # Ahora SQLAlchemy está obligado a ver las tablas
+    app.dependency_overrides[get_db] = override_get_db
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
