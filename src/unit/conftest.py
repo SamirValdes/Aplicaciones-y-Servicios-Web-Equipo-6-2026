@@ -7,7 +7,11 @@ from sqlalchemy.pool import StaticPool
 from main import app
 from src.database.database import Base, get_db
 
-# 1. Configura SQLite en memoria compartiendo la conexión entre hilos (StaticPool)
+# IMPORTACIÓN DIRECTA Y FORZADA DE LAS CLASES MODELO
+from src.entities.estudiante import Estudiante
+from src.entities.persona import Persona
+from src.entities.producto import Producto
+
 engine = create_engine(
     "sqlite://",
     connect_args={"check_same_thread": False},
@@ -15,7 +19,6 @@ engine = create_engine(
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# 2. Reemplaza la BD real por la BD de pruebas
 def override_get_db():
     db = TestingSessionLocal()
     try:
@@ -27,13 +30,11 @@ app.dependency_overrides[get_db] = override_get_db
 
 @pytest.fixture(autouse=True)
 def setup_database():
-    # 3. Crea las tablas antes de cada prueba
+    # Ahora SQLAlchemy está obligado a ver las tablas
     Base.metadata.create_all(bind=engine)
     yield
-    # 4. Borra las tablas al terminar
     Base.metadata.drop_all(bind=engine)
 
 @pytest.fixture
 def cliente():
-    # 5. Centraliza el cliente de pruebas aquí
     return TestClient(app)
