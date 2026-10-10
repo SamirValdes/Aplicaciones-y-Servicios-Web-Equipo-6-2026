@@ -7,3 +7,4 @@ Video de Juan David Restrepo [entrega 3 aplicaciones web](https://youtu.be/6Un7z
 Video de Vilmar Rivas https://youtu.be/ts_GHFO6Mvs?si=PGio8nBECF22ZjIk
 
 Video de Samir Valdes (Entrega Numero 3 https://youtu.be/03RjqkHLpIA)
+video de Vilmar Rivas (Entrega #3 https://youtu.be/MT7gpfuNlko?si=uNSqgtYqqioOyVeF )
