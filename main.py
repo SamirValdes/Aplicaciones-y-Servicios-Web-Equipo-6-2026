@@ -3,13 +3,16 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.database.database import Base, engine
+
 # Los imports registran las entidades en Base.metadata antes de create_all.
 # pylint: disable=unused-import
 from src.entities.estudiante import Estudiante
 from src.entities.persona import Persona
 from src.entities.producto import Producto
+
 # pylint: enable=unused-import
 
 # Importación de routers de cada módulo
@@ -30,6 +33,17 @@ app = FastAPI(
     description="API REST con FastAPI, SQLAlchemy y Neon PostgreSQL",
     version="1.0.0",
     lifespan=lifespan,
+)
+
+# Configuración de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Registro de routers
