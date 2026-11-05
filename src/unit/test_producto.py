@@ -99,6 +99,50 @@ def test_listar_productos_devuelve_500_si_falla_base_datos(
     assert respuesta.text == "Internal Server Error"
 
 
+def test_cors_permite_preflight_desde_angular(cliente: TestClient) -> None:
+    respuesta = cliente.options(
+        "/productos",
+        headers={
+            "Origin": "http://localhost:4200",
+            "Access-Control-Request-Method": "POST",
+        },
+    )
+
+    assert respuesta.status_code == 200
+    assert respuesta.headers["access-control-allow-origin"] == "http://localhost:4200"
+    metodos_permitidos = respuesta.headers["access-control-allow-methods"]
+    assert set(metodos_permitidos.split(", ")) == {
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS",
+    }
+
+
+def test_cors_rechaza_origen_no_configurado(cliente: TestClient) -> None:
+    respuesta = cliente.options(
+        "/productos",
+        headers={
+            "Origin": "http://127.0.0.1:4200",
+            "Access-Control-Request-Method": "GET",
+        },
+    )
+
+    assert respuesta.status_code == 400
+    assert "access-control-allow-origin" not in respuesta.headers
+
+
+def test_swagger_documenta_crud_de_productos(cliente: TestClient) -> None:
+    assert cliente.get("/docs").status_code == 200
+    esquema = cliente.get("/openapi.json").json()
+
+    assert {"get", "post"} <= esquema["paths"]["/productos"].keys()
+    assert {"get", "put", "delete"} <= esquema["paths"][
+        "/productos/{producto_id}"
+    ].keys()
+
+
 def test_obtener_producto_por_id_devuelve_registro(cliente: TestClient) -> None:
     producto_id = insertar_producto()
 
